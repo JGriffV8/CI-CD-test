@@ -1,0 +1,19 @@
+name: Build and Push
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Build Docker image
+        run: echo "Building Docker image for ${{ inputs.environment }}..."
+      - name: Push Docker image to Azure Container Registry
+        run: echo "Pushing Docker image to ACR..."
