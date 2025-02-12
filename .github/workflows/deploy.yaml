@@ -1,0 +1,23 @@
+name: Deploy to Kubernetes
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Set environment
+        run: |
+          if [ "$GITHUB_REF" == "refs/heads/main" ]; then
+            echo "ENV=prev" >> $GITHUB_ENV
+          elif [ "$GITHUB_REF" == "refs/heads/dev" ]; then
+            echo "ENV=dev" >> $GITHUB_ENV
+          fi
+      - name: Deploy Docker image to Kubernetes
+        run: echo "Deploying to $ENV environment in Kubernetes cluster..."
