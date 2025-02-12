@@ -13,9 +13,7 @@ jobs:
 
   build:
     needs: ci
-    if: |
-      needs.ci.outputs.build_required == 'true' && 
-      (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev')
+    if: (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev')
     uses: ./.github/workflows/build.yml
     with:
       environment: ${{ github.ref == 'refs/heads/main' && 'prod' || 'dev' }}
