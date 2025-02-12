@@ -7,18 +7,27 @@ on:
       - dev
 
 jobs:
-  changes: 
-    - uses: dorny/paths-filter@v3
-      id: filter
-      with:
-        filters: |
-          Dockerfile
-          main.py
-          poetry.lock
+  detect-changes:
+    runs-on: ubuntu-latest
+    outputs:
+      build_files: ${{ steps.filter.outputs.build_files }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Check for changes in build-related files
+        uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            build_files:
+              - 'Dockerfile'
+              - 'main.py'
+              - 'poetry.lock'
 
   build-and-push:
     runs-on: ubuntu-latest
-    needs: changes
+    needs: detect-changes
+    if: ${{ needs.detect-changes.outputs.build_files == 'true' }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
