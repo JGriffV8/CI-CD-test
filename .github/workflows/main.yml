@@ -8,8 +8,6 @@ on:
 jobs:
   ci:
     uses: ./.github/workflows/ci.yml
-    with:
-      environment: ${{ github.ref == 'refs/heads/main' && 'prod' || 'dev' }}
 
   build:
     needs: ci
