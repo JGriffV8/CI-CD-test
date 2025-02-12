@@ -23,6 +23,7 @@ jobs:
               - 'Dockerfile'
               - 'main.py'
               - 'poetry.lock'
+              - 'src/**'
 
   build-and-push:
     runs-on: ubuntu-latest
