@@ -25,14 +25,13 @@ jobs:
 
   deploy:
     needs: build
-    if: success()
     uses: ./.github/workflows/deploy.yml
     with:
       version: ${{ needs.build.outputs.version }}
 
   release:
     needs: deploy
-    if: ${{ needs.deploy.outputs.deploy-prev-success == 'true' }}
+    if: ${{ needs.deploy.outputs.deploy-prev-success == 'success' }}
     uses: ./.github/workflows/release.yaml
     with:
       version: ${{ needs.deploy.outputs.version }}

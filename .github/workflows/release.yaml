@@ -7,7 +7,7 @@ on:
     inputs:
       version:
         required: true
-        type: string
+        type: string 
 
 jobs:
   echo-version:
