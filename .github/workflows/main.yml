@@ -27,14 +27,14 @@ jobs:
     if: success()
     uses: ./.github/workflows/deploy.yml
     with:
-      version: ${{ needs.detect-changes.outputs.version}}
+      version: ${{ needs.build.outputs.version}}
 
   release:
     needs:
       - detect-changes
       - build
       - deploy
-    if: ${{ needs.detect-changes.outputs.version != 'latest' }}
+    if: ${{ needs.deploy.outputs.version != 'latest' }}
     uses: ./.github/workflows/release.yaml
     with:
-      version: ${{ needs.detect-changes.outputs.version}}
+      version: ${{ needs.deploy.outputs.version}}
