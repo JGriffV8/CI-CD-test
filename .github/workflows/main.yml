@@ -16,7 +16,7 @@ jobs:
     uses: ./.github/workflows/detect-changes.yaml
 
   build:
-    needs: ci
+    needs: detect-changes
     if: ${{ needs.detect-changes.outputs.build_files == 'true' || needs.detect-changes.outputs.version != 'latest' }}
     uses: ./.github/workflows/build.yml
     with:
