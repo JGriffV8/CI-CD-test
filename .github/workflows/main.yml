@@ -13,7 +13,7 @@ jobs:
     needs: 
       - ci
     if: ${{ github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev' }}
-    uses: ./.github/workflows/detect_changes.yaml
+    uses: ./.github/workflows/detect-changes.yaml
 
   build:
     needs: ci
