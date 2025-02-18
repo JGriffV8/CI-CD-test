@@ -29,3 +29,6 @@ jobs:
     steps:
       - name: Echo Deployment Version
         run: echo "Deploying version '${{ inputs.version }}' to PREV environment."
+
+    outputs:
+      deploy-prev-success: ${{ job.status == 'success' }}
