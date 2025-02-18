@@ -6,6 +6,13 @@ on:
       environment:
         required: true
         type: string
+      version:
+        required: true
+        type: string
+    outputs:
+      version:
+        description: "Version to be used in the Docker image tag"
+        value: ${{ inputs.version }}
 
 jobs:
   build-and-push:
@@ -17,3 +24,7 @@ jobs:
         run: echo "Building Docker image for ${{ inputs.environment }}..."
       - name: Push Docker image to Azure Container Registry
         run: echo "Pushing Docker image to ACR..."
+      - name: Echo version
+        id: echo-version
+        run: |
+          echo "version=${{ inputs.version }}" >> $GITHUB_OUTPUT

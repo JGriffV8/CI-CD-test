@@ -20,14 +20,15 @@ jobs:
     if: ${{ needs.detect-changes.outputs.build_files == 'true' || needs.detect-changes.outputs.version != 'latest' }}
     uses: ./.github/workflows/build.yml
     with:
-      version: ${{ needs.detect-changes.outputs.version}}
+      environment: ${{ github.ref == 'refs/heads/main' && 'prod' || 'dev' }}
+      version: ${{ needs.detect-changes.outputs.version }}
 
   deploy:
     needs: build
     if: success()
     uses: ./.github/workflows/deploy.yml
     with:
-      version: ${{ needs.build.outputs.version}}
+      version: ${{ needs.build.outputs.version }}
 
   release:
     needs:
@@ -37,4 +38,4 @@ jobs:
     if: ${{ needs.deploy.outputs.version != 'latest' }}
     uses: ./.github/workflows/release.yaml
     with:
-      version: ${{ needs.deploy.outputs.version}}
+      version: ${{ needs.deploy.outputs.version }}
