@@ -6,6 +6,10 @@ on:
       environment:
         required: true
         type: string
+    version:
+      required: true
+      type: string
+      default: 'latest'
 
 jobs:
   deploy:
