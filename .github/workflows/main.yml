@@ -23,12 +23,12 @@ jobs:
       environment: ${{ github.ref == 'refs/heads/main' && 'prod' || 'dev' }}
       version: ${{ needs.detect-changes.outputs.version }}
 
-  # deploy:
-  #   needs: build
-  #   if: success()
-  #   uses: ./.github/workflows/deploy.yml
-  #   with:
-  #     version: ${{ needs.build.outputs.version }}
+  deploy:
+    needs: build
+    if: success()
+    uses: ./.github/workflows/deploy.yml
+    with:
+      version: ${{ needs.build.outputs.version }}
 
   # release:
   #   needs:
