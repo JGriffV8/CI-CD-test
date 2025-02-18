@@ -15,27 +15,27 @@ jobs:
     if: ${{ github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev' }}
     uses: ./.github/workflows/detect-changes.yaml
 
-  build:
-    needs: detect-changes
-    if: ${{ needs.detect-changes.outputs.build_files == 'true' || needs.detect-changes.outputs.version != 'latest' }}
-    uses: ./.github/workflows/build.yml
-    with:
-      environment: ${{ github.ref == 'refs/heads/main' && 'prod' || 'dev' }}
-      version: ${{ needs.detect-changes.outputs.version }}
+  # build:
+  #   needs: detect-changes
+  #   if: ${{ needs.detect-changes.outputs.build_files == 'true' || needs.detect-changes.outputs.version != 'latest' }}
+  #   uses: ./.github/workflows/build.yml
+  #   with:
+  #     environment: ${{ github.ref == 'refs/heads/main' && 'prod' || 'dev' }}
+  #     version: ${{ needs.detect-changes.outputs.version }}
 
-  deploy:
-    needs: build
-    if: success()
-    uses: ./.github/workflows/deploy.yml
-    with:
-      version: ${{ needs.build.outputs.version }}
+  # deploy:
+  #   needs: build
+  #   if: success()
+  #   uses: ./.github/workflows/deploy.yml
+  #   with:
+  #     version: ${{ needs.build.outputs.version }}
 
-  release:
-    needs:
-      - detect-changes
-      - build
-      - deploy
-    if: ${{ needs.deploy.outputs.version != 'latest' }}
-    uses: ./.github/workflows/release.yaml
-    with:
-      version: ${{ needs.deploy.outputs.version }}
+  # release:
+  #   needs:
+  #     - detect-changes
+  #     - build
+  #     - deploy
+  #   if: ${{ needs.deploy.outputs.version != 'latest' }}
+  #   uses: ./.github/workflows/release.yaml
+  #   with:
+  #     version: ${{ needs.deploy.outputs.version }}
