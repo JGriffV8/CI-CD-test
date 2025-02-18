@@ -9,7 +9,7 @@ on:
     outputs:
       deploy-prev-success:
         description: "Indicates if the deployment to PREV was successful"
-        value: ${{ needs.deploy-prev.outputs.deploy-prev-success }}
+        value: ${{ jobs.deploy-prev.outputs.deploy-prev-success }}
     
 jobs:
   deploy-dev:
