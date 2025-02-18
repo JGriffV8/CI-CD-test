@@ -14,4 +14,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Echo Version
-        run: echo "Version: ${{ github.event.inputs.version }}"
+        run: echo "Version: $VERSION"
+        env:
+          VERSION: ${{ inputs.version }}
