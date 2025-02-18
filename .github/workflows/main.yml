@@ -36,3 +36,5 @@ jobs:
       - deploy
     if: ${{ needs.detect-changes.outputs.version != 'latest' }}
     uses: ./.github/workflows/release.yaml
+    with:
+      version: ${{ needs.detect-changes.outputs.version}}
