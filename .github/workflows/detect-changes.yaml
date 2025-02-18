@@ -60,7 +60,18 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Get version from build.info
-        id: get-version
+      - name: Set version output
+        id: set_version
         run: |
-          echo "version=$(cat build.info)" >> $GITHUB_OUTPUT
+          if [ -f build.info ]; then
+            version=$(cat build.info)
+            echo "version=$version" >> $GITHUB_OUTPUT
+          else
+            echo "Error: build.info does not exist."
+            exit 1
+          fi
+      - name: Use version output
+        run: |
+          echo "The extracted version is: ${{ steps.set_version.outputs.version }}"
+
+      
