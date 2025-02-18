@@ -1,21 +1,31 @@
-name: Deploy
+name: 🚢️ Deploy @ DEV or PREV
 
 on:
   workflow_call:
     inputs:
-      environment:
-        required: true
-        type: string
       version:
-        required: true
         type: string
         default: 'latest'
 
 jobs:
-  deploy:
+  deploy-dev:
+    name: 🚢 Deploy ∷ DEV
+    if: ${{ github.ref_name == 'dev' || inputs.version == 'latest' }}
     runs-on: ubuntu-latest
+    environment: dev
+    env:
+      AKS_NAMESPACE: kie-accelerator
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-      - name: Deploy to Kubernetes
-        run: echo "Deploying to ${{ inputs.environment }} environment in Kubernetes cluster..."
+      - name: Echo Deployment Version
+        run: echo "Deploying version '${{ inputs.version }}' to DEV environment."
+
+  deploy-prev:
+    name: 🚢 Deploy ∷ PREV
+    if: ${{ github.ref_name == 'main' && inputs.version != 'latest' }}
+    runs-on: ubuntu-latest
+    environment: prev
+    env:
+      AKS_NAMESPACE: kie-accelerator-prev
+    steps:
+      - name: Echo Deployment Version
+        run: echo "Deploying version '${{ inputs.version }}' to PREV environment."
