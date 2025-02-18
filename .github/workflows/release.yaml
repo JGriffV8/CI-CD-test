@@ -1,0 +1,20 @@
+name: Release docker images
+
+on:
+  release:
+    types: [ published ]
+  workflow_call:
+    inputs:
+      version:
+        required: true
+        type: string 
+
+jobs:
+  echo-version:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Echo Version
+        env:
+          VERSION: ${{ inputs.version }}
+        run: | 
+          echo "Version: $VERSION"

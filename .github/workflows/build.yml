@@ -1,0 +1,31 @@
+name: Build and Push
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+      version:
+        required: true
+        type: string
+        default: 'latest'
+    outputs:
+      version:
+        description: "Version to be used in the Docker image tag"
+        value: ${{ inputs.version }}
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Build Docker image
+        run: echo "Building Docker image for ${{ inputs.environment }}..."
+      - name: Push Docker image to Azure Container Registry
+        run: echo "Pushing Docker image to ACR..."
+      - name: Echo version
+        id: echo-version
+        run: |
+          echo "version=${{ inputs.version }}" >> $GITHUB_OUTPUT

@@ -1,0 +1,21 @@
+name: CI
+
+on:
+  workflow_call:
+
+jobs:
+  lint-and-format:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Run linting and formatting
+        run: echo "Running linting and formatting checks..."
+
+  python-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Run Python tests
+        run: echo "Running Python tests..."

@@ -1,0 +1,34 @@
+name: 🚢️ Deploy @ DEV or PREV
+
+on:
+  workflow_call:
+    inputs:
+      version:
+        type: string
+        default: 'latest'
+    outputs:
+      deploy-prev-success:
+        description: "Indicates if the deployment to PREV was successful"
+        value: ${{ jobs.deploy-prev.outputs.deploy-prev-success }}
+    
+jobs:
+  deploy-dev:
+    name: 🚢 Deploy ∷ DEV
+    if: ${{ github.ref_name == 'dev' || inputs.version == 'latest' }}
+    runs-on: ubuntu-latest
+    environment: dev
+    steps:
+      - name: Echo Deployment Version
+        run: echo "Deploying version '${{ inputs.version }}' to DEV environment."
+
+  deploy-prev:
+    name: 🚢 Deploy ∷ PREV
+    if: ${{ github.ref_name == 'main' && inputs.version != 'latest' }}
+    runs-on: ubuntu-latest
+    environment: prev
+    steps:
+      - name: Echo Deployment Version
+        run: echo "Deploying version '${{ inputs.version }}' to PREV environment."
+
+    outputs:
+      deploy-prev-success: ${{ job.status == 'success' }}
