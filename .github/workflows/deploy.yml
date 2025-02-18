@@ -6,15 +6,17 @@ on:
       version:
         type: string
         default: 'latest'
-
+    outputs:
+      deploy-prev-success:
+        description: "Indicates if the deployment to PREV was successful"
+        value: ${{ needs.deploy-prev.outputs.deploy-prev-success }}
+    
 jobs:
   deploy-dev:
     name: 🚢 Deploy ∷ DEV
     if: ${{ github.ref_name == 'dev' || inputs.version == 'latest' }}
     runs-on: ubuntu-latest
     environment: dev
-    env:
-      AKS_NAMESPACE: kie-accelerator
     steps:
       - name: Echo Deployment Version
         run: echo "Deploying version '${{ inputs.version }}' to DEV environment."
@@ -24,8 +26,6 @@ jobs:
     if: ${{ github.ref_name == 'main' && inputs.version != 'latest' }}
     runs-on: ubuntu-latest
     environment: prev
-    env:
-      AKS_NAMESPACE: kie-accelerator-prev
     steps:
       - name: Echo Deployment Version
         run: echo "Deploying version '${{ inputs.version }}' to PREV environment."
