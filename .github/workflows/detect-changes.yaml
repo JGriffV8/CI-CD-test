@@ -31,47 +31,28 @@ jobs:
               - 'poetry.lock'
               - 'src/**'
 
-  detect-version-changes:
-    runs-on: ubuntu-latest
-    outputs:
-      version_file: ${{ steps.filter.outputs.version_file }}
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Check for changes in version file
-        uses: dorny/paths-filter@v3
-        id: filter
-        with:
-          base: ${{ github.ref }}
-          filters: |
-            version_file:
-              - 'build.info'
-
   get-version:
     needs: detect-version-changes
-    if: needs.detect-version-changes.outputs.version_file == 'true'
     runs-on: ubuntu-latest
-    
     outputs:
-      version: ${{ steps.get-version.outputs.version }}
-
+      version: ${{ steps.set_version.outputs.version }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set version output
+      - name: Determine version
         id: set_version
         run: |
-          if [ -f build.info ]; then
-            version=$(cat build.info)
-            echo "version=$version" >> $GITHUB_OUTPUT
+          if [ "${{ needs.detect-version-changes.outputs.version_file_changed }}" == 'true' ]; then
+            if [ -f build.info ]; then
+              version=$(cat build.info)
+              echo "version=$version" >> $GITHUB_OUTPUT
+            else
+              echo "Error: build.info does not exist."
+              exit 1
+            fi
           else
-            echo "Error: build.info does not exist."
-            exit 1
+            echo "version=latest" >> $GITHUB_OUTPUT
           fi
-      - name: Use version output
-        run: |
-          echo "The extracted version is: ${{ steps.set_version.outputs.version }}"
 
       
