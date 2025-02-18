@@ -1,0 +1,25 @@
+name: Release docker images
+
+on:
+  release:
+    types: [ published ]
+  workflow_dispatch:
+
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Create GitHub Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ needs.build.outputs.version_ai_backend }}
+          release_name: ${{ needs.build.outputs.version_ai_backend }}
+          draft: false
+          prerelease: false

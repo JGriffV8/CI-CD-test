@@ -1,0 +1,66 @@
+name: Detect Changes
+
+on:
+  workflow_call:
+    outputs:
+      build_files:
+        description: "Indicates if build-related files have changed"
+        value: ${{ jobs.detect-build-changes.outputs.build_files }}
+      version:
+        description: "Version found in the repository"
+        value: ${{ jobs.get-version.outputs.version }}
+
+jobs:
+  detect-build-changes:
+    runs-on: ubuntu-latest
+    outputs:
+      build_files: ${{ steps.filter.outputs.build_files }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Check for changes in build-related files
+        uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          base: ${{ github.ref }}
+          filters: |
+            build_files:
+              - 'Dockerfile'
+              - 'main.py'
+              - 'poetry.lock'
+              - 'src/**'
+
+  detect-version-changes:
+    runs-on: ubuntu-latest
+    outputs:
+      version_file: ${{ steps.filter.outputs.version_file }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check for changes in version file
+        uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          base: ${{ github.ref }}
+          filters: |
+            version_file:
+              - 'build.info'
+
+  get-version:
+    needs: detect-version-changes
+    if: needs.detect-version-changes.outputs.version_file == 'true'
+    runs-on: ubuntu-latest
+    
+    outputs:
+      version: ${{ steps.get-version.outputs.version }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Get version from build.info
+        id: get-version
+        run: |
+          echo "version=$(cat build.info)" >> $GITHUB_OUTPUT
