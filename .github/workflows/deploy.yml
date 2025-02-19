@@ -33,10 +33,8 @@ jobs:
       - name: Set Deployment Status
         id: set-deploy-status
         run: |
-          if [ "$GITHUB_JOB" == "success" ]; then
-            echo "deploy_prev_success=true" >> $GITHUB_OUTPUT
-          else
-            echo "deploy_prev_success=false" >> $GITHUB_OUTPUT
-          fi
+          echo "deploy_prev_success=true" >> $GITHUB_OUTPUT
+          
     outputs:
       deploy_prev_success: ${{ steps.set-deploy-status.outputs.deploy_prev_success }}
+
