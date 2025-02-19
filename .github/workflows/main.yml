@@ -30,8 +30,8 @@ jobs:
       version: ${{ needs.build.outputs.version }}
 
   release:
-    needs: deploy
-    if: ${{ needs.deploy.outputs.deploy-prev-success == 'success' }}
+    needs: deploy-prev
+    if: ${{ needs.deploy.outputs.deploy_prev_success == 'true' }}
     uses: ./.github/workflows/release.yaml
     with:
       version: ${{ needs.deploy.outputs.version }}

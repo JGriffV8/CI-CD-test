@@ -30,5 +30,13 @@ jobs:
       - name: Echo Deployment Version
         run: echo "Deploying version '${{ inputs.version }}' to PREV environment."
 
+      - name: Set Deployment Status
+        id: set-deploy-status
+        run: |
+          if [ "$GITHUB_JOB" == "success" ]; then
+            echo "deploy_prev_success=true" >> $GITHUB_OUTPUT
+          else
+            echo "deploy_prev_success=false" >> $GITHUB_OUTPUT
+          fi
     outputs:
-      deploy-prev-success: ${{ job.status == 'success' }}
+      deploy_prev_success: ${{ steps.set-deploy-status.outputs.deploy_prev_success }}

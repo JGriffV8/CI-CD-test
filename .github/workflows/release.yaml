@@ -13,8 +13,5 @@ jobs:
   echo-version:
     runs-on: ubuntu-latest
     steps:
-      - name: Echo Version
-        env:
-          VERSION: ${{ inputs.version }}
-        run: | 
-          echo "Version: $VERSION"
+      - name: Release Application
+        run: echo "Releasing version '${{ needs.deploy-prev.outputs.version }}'"
