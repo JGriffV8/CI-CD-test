@@ -7,7 +7,7 @@ on:
         type: string
         default: 'latest'
     outputs:
-      deploy-prev-success:
+      deploy_prev_success:
         description: "Indicates if the deployment to PREV was successful"
         value: ${{ jobs.deploy-prev.outputs.deploy_prev_success }}
     
