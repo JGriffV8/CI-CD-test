@@ -14,4 +14,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Release Application
-        run: echo "Releasing version '${{ needs.deploy-prev.outputs.version }}'"
+        run: echo "Releasing version '${{ inputs.version }}'"
